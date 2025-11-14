@@ -1,3 +1,4 @@
+import type React from "react";   // ✅ add this line
 import "./App.css";
 
 function App() {
@@ -16,7 +17,7 @@ function App() {
   // Pie chart percentages
   const lampShare = lampPower / MAX_POWER;
   const phoneShare = phonePower / MAX_POWER;
-  const unusedShare = Math.max(0, 1 - lampShare - phoneShare);
+  // ❌ removed: const unusedShare = Math.max(0, 1 - lampShare - phoneShare);
 
   const lampPercent = lampShare * 100;
   const phonePercent = phoneShare * 100;
