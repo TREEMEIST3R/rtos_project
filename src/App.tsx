@@ -1,4 +1,4 @@
-import type React from "react";   // ✅ add this line
+import type React from "react";   
 import "./App.css";
 
 function App() {
