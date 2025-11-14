@@ -17,7 +17,6 @@ function App() {
   // Pie chart percentages
   const lampShare = lampPower / MAX_POWER;
   const phoneShare = phonePower / MAX_POWER;
-  // ❌ removed: const unusedShare = Math.max(0, 1 - lampShare - phoneShare);
 
   const lampPercent = lampShare * 100;
   const phonePercent = phoneShare * 100;
