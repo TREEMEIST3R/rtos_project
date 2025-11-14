@@ -1,35 +1,103 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// src/App.jsx
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  // ---- Power data (edit these numbers) ----
+  const MAX_POWER = 2;      // watts
+  const lampPower = 1.2;    // watts
+  const phonePower = 0.4;   // watts
+
+  // Clamp so we never go over MAX_POWER visually
+  const usedTotal = Math.min(lampPower + phonePower, MAX_POWER);
+
+  // For bars (percentage of max)
+  const lampPercentOfMax = (lampPower / MAX_POWER) * 100;
+  const phonePercentOfMax = (phonePower / MAX_POWER) * 100;
+
+  // For pie chart (Lamp vs Phone vs Unused out of MAX_POWER)
+  const lampShare = lampPower / MAX_POWER;
+  const phoneShare = phonePower / MAX_POWER;
+  const unusedShare = Math.max(0, 1 - lampShare - phoneShare);
+
+  const lampPercent = lampShare * 100;
+  const phonePercent = phoneShare * 100;
+  const unusedPercent = unusedShare * 100;
+
+  const pieStyle = {
+    background: `conic-gradient(
+      #f97316 0 ${lampPercent}%,
+      #22c55e ${lampPercent}% ${lampPercent + phonePercent}%,
+      #0f172a ${lampPercent + phonePercent}% 100%
+    )`,
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="dashboard-root">
+      <div className="dashboard-card">
+        <header className="dashboard-header">
+          <h1>Smart Home Dashboard</h1>
+          <p>Live power usage (max {MAX_POWER}W)</p>
+        </header>
+
+        <section className="section">
+          <h2>Devices</h2>
+
+          <div className="device-row">
+            <div className="device-info">
+              <span className="device-name">Lamp</span>
+              <span className="device-power">{lampPower.toFixed(2)} W</span>
+            </div>
+            <div className="bar-track">
+              <div
+                className="bar-fill lamp"
+                style={{ width: `${Math.min(lampPercentOfMax, 100)}%` }}
+              ></div>
+            </div>
+          </div>
+
+          <div className="device-row">
+            <div className="device-info">
+              <span className="device-name">Phone Charger</span>
+              <span className="device-power">{phonePower.toFixed(2)} W</span>
+            </div>
+            <div className="bar-track">
+              <div
+                className="bar-fill phone"
+                style={{ width: `${Math.min(phonePercentOfMax, 100)}%` }}
+              ></div>
+            </div>
+          </div>
+        </section>
+
+        <section className="section pie-section">
+          <div>
+            <h2>Overall Usage</h2>
+            <p className="overall-text">
+              Using {usedTotal.toFixed(2)}W of {MAX_POWER}W
+            </p>
+            <ul className="legend">
+              <li>
+                <span className="legend-dot lamp-dot" />
+                Lamp ({lampPower.toFixed(2)}W)
+              </li>
+              <li>
+                <span className="legend-dot phone-dot" />
+                Phone ({phonePower.toFixed(2)}W)
+              </li>
+              <li>
+                <span className="legend-dot unused-dot" />
+                Unused ({Math.max(MAX_POWER - usedTotal, 0).toFixed(2)}W)
+              </li>
+            </ul>
+          </div>
+
+          <div className="pie-wrapper">
+            <div className="pie" style={pieStyle}></div>
+          </div>
+        </section>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
